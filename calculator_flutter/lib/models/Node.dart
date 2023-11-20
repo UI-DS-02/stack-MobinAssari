@@ -1,5 +1,8 @@
 class Node{
-  Node(this.data);
-  late Node next;
-  late String data;
+  Node(this._data);
+  Node? next;
+  String? _data;
+  String getData(){
+    return _data!;
+  }
 }
