@@ -1,5 +1,5 @@
 import 'package:calculator_flutter/models/Node.dart';
-class Stack{ //with LinkedList
+class MyStack{ //with LinkedList
   int _size = 0;
   Node? _head;
   Node? _tail;
@@ -25,6 +25,9 @@ class Stack{ //with LinkedList
     if(_head == null) _tail = null;
     _size--;
     return first;
+  }
+  String first(){
+    return _head!.getData();
   }
   bool isEmpty(){
     return _head == null;
