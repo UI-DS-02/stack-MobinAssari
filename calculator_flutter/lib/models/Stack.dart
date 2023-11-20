@@ -6,18 +6,20 @@ class Stack{ //with LinkedList
   int size(){
     return _size;
   }
-  void addLast(String data){
+  //get data and add node to the top of the stack
+  void push(String data){
     var newNode = Node(data);
-    if(_tail == null){
+    if(_head == null){
       _head = newNode;
       _tail = newNode;
       _size++;
       return;
     }
-    _tail!.next = newNode;
-    _tail = newNode;
+    newNode.next = _head;
+    _head = newNode;
   }
-  String removeFirst(){
+  //remove the
+  String pop(){
     var first = _head!.getData();
     _head = _head!.next;
     if(_head == null) _tail = null;
