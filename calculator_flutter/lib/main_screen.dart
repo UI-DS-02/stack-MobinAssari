@@ -1,4 +1,10 @@
+import 'dart:ffi';
+import 'dart:math';
+
+import 'package:calculator_flutter/models/MyStack.dart';
+import 'package:calculator_flutter/models/Operator.dart';
 import 'package:flutter/material.dart';
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -10,6 +16,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List<String> historyNumberList = [];
   var textEditingController = TextEditingController(text: "Enter:");
+  var operatorList = [
+    Operator("!", 1),
+    Operator("^", 2),
+    Operator("*", 3),
+    Operator("/", 3),
+    Operator("+", 4),
+    Operator("-", 4),
+  ];
 
 
   @override
@@ -63,8 +77,8 @@ class _MainScreenState extends State<MainScreen> {
 
     List<Widget> buttonRows = [
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-        Container(width: buttonSize,height: buttonSize,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("(");}, child: Text("(",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonSize,height: buttonSize,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText(")");}, child: Text(")",style: TextStyle(fontSize: 24),),),),
+        Container(width: buttonSize,height: buttonSize,decoration: BoxDecoration(color: Color(0xff030d0e)),child: ElevatedButton(onPressed: (){changeText("(");}, child: Text("(",style: TextStyle(fontSize: 24),),),),
+        Container(width: buttonSize,height: buttonSize,decoration: BoxDecoration(color: Color(0xff030d0e)),child: ElevatedButton(onPressed: (){changeText(")");}, child: Text(")",style: TextStyle(fontSize: 24),),),),
         Container(width: buttonSize,height: buttonSize,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("!");}, child: Text("!",style: TextStyle(fontSize: 24),),),),
         Container(width: buttonSize,height: buttonSize,decoration: BoxDecoration(color: Color(0xff0b4044)),child: TextButton(onPressed: (){changeText("+");}, child: Text("+",style: TextStyle(fontSize: 24),),),),
       ],),
@@ -106,6 +120,63 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+  String convertInfixToPostfix(String infix){
+    String postfix = "";
+    var operatorStack = MyStack();
+    var operandStack = MyStack();
+    String currentNum = "";
+    for(var i = 0; i< infix.length; i++){
+      bool isOperand = ".0123456789".contains(infix[i]);
+      if(isOperand){
+        currentNum += "${infix[i]} ";
+      }
+      else {
+        if (currentNum.isNotEmpty) {
+          postfix += currentNum;
+          currentNum = "";
+        }
+
+        switch (infix[i]) {
+          case "=":
+            break;
+
+          case "(":
+          case "-":
+          case "+":
+            operatorStack.push(infix[i]);
+            break;
+
+          case ")":
+
+
+          case "e":
+            postfix += exp(1).toString();
+            break;
+
+          case"p":
+            postfix += pi.toString();
+            break;
+
+          default:{
+            if(findPrecedence(infix[i])<findPrecedence(operatorStack.first())){
+              postfix += "${operatorStack.pop()} ";
+            }
+            operandStack.push(infix[i]);
+            break;
+        }}
+      }
+    }
+
+    return postfix;
+  }
+  int findPrecedence(String char){
+    for (var operator in operatorList){
+      if(operator.char == char){
+        return operator.precedence;
+      }
+    }
+    return 0;
   }
 
 }
