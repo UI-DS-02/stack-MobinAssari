@@ -19,15 +19,17 @@ class MyStack{ //with LinkedList
     _head = newNode;
   }
   //remove the
-  String pop(){
+  String? pop(){
+    if(_head == null) return null;
     var first = _head!.getData();
     _head = _head!.next;
     if(_head == null) _tail = null;
     _size--;
     return first;
   }
-  String first(){
-    return _head!.getData();
+  String? first(){
+    return _head == null ? null : _head!.getData();
+
   }
   bool isEmpty(){
     return _head == null;
