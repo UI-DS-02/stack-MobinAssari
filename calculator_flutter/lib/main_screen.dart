@@ -13,7 +13,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  double? buttonWidth;
+
+  @override
+  void initState() {
+    //buttonWidth = MediaQuery.of(context).size.width * 0.24 ;
+    super.initState();
+  }
   List<String> historyNumberList = [];
+
   bool minimize = true;
   var textEditingController = TextEditingController();
   var operatorList = [
@@ -25,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
     Operator("-", 4),
   ];
 
+
   @override
   void dispose() {
     textEditingController.dispose();
@@ -33,6 +42,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(color: Color(0xff000807),),
@@ -60,80 +70,127 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget currentText() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        child: TextField(controller: textEditingController,style: TextStyle(color: Colors.white,fontSize: 24),readOnly: true),
-      ),
+    return Row(
+      children: [
+        Container(
+          width: double.minPositive,
+          color: Colors.blue,
+            child: TextField(controller: textEditingController,style: TextStyle(color: Colors.white,fontSize: 24),readOnly: true),
+        ),
+        Container(color: Colors.white,height: 20,),
+      ],
     );
   }
 
 
   Widget keyboard() {
-    var buttonWidth = minimize ? MediaQuery.of(context).size.width * 0.24 : MediaQuery.of(context).size.width * 0.24 *4/5;
+    //var buttonWidth = MediaQuery.of(context).size.width * 0.24 ;
+
+    var mainAxisAlignment = MainAxisAlignment.start;
     var buttonHeight = MediaQuery.of(context).size.width * 0.24;
+    void buttonWidthAnimator(){
+      if(!minimize){
+        setState(() {
+          mainAxisAlignment = MainAxisAlignment.start ;
+
+          buttonWidth = MediaQuery.of(context).size.width * 0.24;
+
+        });
+      }
+      else{
+        setState(() {
+          mainAxisAlignment = MainAxisAlignment.spaceEvenly;
+
+          buttonWidth = MediaQuery.of(context).size.width * 0.24 * 4/5;
+        });
+      }
+      minimize = !minimize;
+    }
+
+
     void changeText(String text){
       textEditingController.text += text;
     }
     Color numColors = Color(0xff082931);
+    Duration sizeChangeDuration = const Duration(milliseconds: 300);
 
     List<Widget> buttonRows = [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){ setState(() {
-          minimize = !minimize;
-        });}, child: Text( minimize ? "<-" : "->",style: TextStyle(fontSize: 24),),),),
-        if(!minimize) Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("!");}, child: Text("!",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("(");}, child: Text("(",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText(")");}, child: Text(")",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-            255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("+");}, child: Text("+",style: TextStyle(fontSize: 24),),),),
+      Directionality(
+        textDirection: TextDirection.rtl,
+        child: Row(mainAxisAlignment: mainAxisAlignment ,crossAxisAlignment: CrossAxisAlignment.center, children: [
+          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+              255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("+");}, child: Text("+",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("(");}, child: Text("(",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText(")");}, child: Text(")",style: TextStyle(fontSize: 24),),),),
+          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("!");}, child: Text("!",style: TextStyle(fontSize: 24),),),)),
+          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){ setState(() {
+            buttonWidthAnimator();
+            //minimize = !minimize;
+          });}, child: Text( minimize ? "<-" : "->",style: TextStyle(fontSize: 24),),),),
 
-      ],),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-        if(!minimize) Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("^");}, child: Text("^",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("7");}, child: Text("7",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("8");}, child: Text("8",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("9");}, child: Text("9",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-            255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("-");}, child: Text("-",style: TextStyle(fontSize: 24),),),),
-      ],),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-        if(!minimize) Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("e");}, child: Text("e",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("4");}, child: Text("4",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("5");}, child: Text("5",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("6");}, child: Text("6",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-            255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("*");}, child: Text("*",style: TextStyle(fontSize: 24),),),),
-      ],),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-        if(!minimize) Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("p");}, child: Text("p",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("1");}, child: Text("1",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("2");}, child: Text("2",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("3");}, child: Text("3",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-            255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("/");}, child: Text("/",style: TextStyle(fontSize: 24),),),),
-      ],),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-        if(!minimize) Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("^");}, child: Text("^",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: IconButton(onPressed: textEditingController.text.isNotEmpty ? (){textEditingController.text = textEditingController.text.substring(0,textEditingController.text.length-1);}:(){}, icon: Icon(Icons.backspace_outlined),color: Colors.white,),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("0");}, child: Text("0",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: TextButton(onPressed: (){changeText(".");}, child: Text(".",style: TextStyle(fontSize: 24),),),),
-        Container(width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-            255, 28, 117, 109),Color.fromARGB(255, 43, 180, 167)]),),child: TextButton(onPressed: (){print(convertInfixToPostfix(textEditingController.text));}, child: Text("=",style: TextStyle(fontSize: 24),),),),
-      ],),
+
+        ],),
+      ),
+      Directionality(textDirection: TextDirection.rtl,
+        child: Row(mainAxisAlignment: MainAxisAlignment.start,children: [
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+              255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("-");}, child: Text("-",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("7");}, child: Text("7",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("8");}, child: Text("8",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("9");}, child: Text("9",style: TextStyle(fontSize: 24),),),),
+          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("^");}, child: Text("^",style: TextStyle(fontSize: 24),),),)),
+
+        ],),
+      ),
+      Directionality(textDirection: TextDirection.rtl,
+        child: Row(mainAxisAlignment: MainAxisAlignment.start,children: [
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+              255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("*");}, child: Text("*",style: TextStyle(fontSize: 24),),),),
+
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("4");}, child: Text("4",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("5");}, child: Text("5",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("6");}, child: Text("6",style: TextStyle(fontSize: 24),),),),
+          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("e");}, child: Text("e",style: TextStyle(fontSize: 24),),),)),
+
+        ],),
+      ),
+      Directionality(textDirection: TextDirection.rtl,
+        child: Row(mainAxisAlignment: MainAxisAlignment.start,children: [
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+              255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("/");}, child: Text("/",style: TextStyle(fontSize: 24),),),),
+
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("1");}, child: Text("1",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("2");}, child: Text("2",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("3");}, child: Text("3",style: TextStyle(fontSize: 24),),),),
+          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("p");}, child: Text("p",style: TextStyle(fontSize: 24),),),)),
+
+        ],),
+      ),
+      Directionality(textDirection: TextDirection.rtl,
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+              255, 28, 117, 109),Color.fromARGB(255, 43, 180, 167)]),),child: TextButton(onPressed: (){print(convertInfixToPostfix(textEditingController.text));}, child: Text("=",style: TextStyle(fontSize: 24),),),),
+
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: IconButton(onPressed: textEditingController.text.isNotEmpty ? (){textEditingController.text = textEditingController.text.substring(0,textEditingController.text.length-1);}:(){}, icon: Icon(Icons.backspace_outlined),color: Colors.white,),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("0");}, child: Text("0",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: TextButton(onPressed: (){changeText(".");}, child: Text(".",style: TextStyle(fontSize: 24),),),),
+          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("^");}, child: Text("^",style: TextStyle(fontSize: 24),),),)),
+
+        ],),
+      ),
     ];
 
 
     return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(0.0),
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ...buttonRows,
           ],
         ),
-      ),
+
     );
   }
   String convertInfixToPostfix(String infix){
