@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:calculator_flutter/models/MyStack.dart';
 import 'package:calculator_flutter/models/Operator.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +51,10 @@ class _MainScreenState extends State<MainScreen> {
 
           children: [
             historyNumbers(),
-            currentText(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: currentText(),
+            ),
             Expanded(child: keyboard())
           ],
         ),
@@ -121,63 +123,123 @@ class _MainScreenState extends State<MainScreen> {
       Directionality(
         textDirection: TextDirection.rtl,
         child: Row(mainAxisAlignment: mainAxisAlignment ,crossAxisAlignment: CrossAxisAlignment.center, children: [
-          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-              255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("+");}, child: Text("+",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("(");}, child: Text(")",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText(")");}, child: Text("(",style: TextStyle(fontSize: 24),),),),
-          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("!");}, child: Text("!",style: TextStyle(fontSize: 24),),),)),
-          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){ setState(() {
-            buttonWidthAnimator();
-            //minimize = !minimize;
-          });}, child: Text( minimize ? "->" : "<-" ,style: TextStyle(fontSize: 24),),),),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+                255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("+");}, child: Text("+",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("(");}, child: Text(")",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText(")");}, child: Text("(",style: TextStyle(fontSize: 24),),),),
+          ),
+          Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child:minimize ? SizedBox() : TextButton(onPressed: (){changeText("!");}, child: Text("!",style: TextStyle(fontSize: 24),),),)),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){ setState(() {
+              buttonWidthAnimator();
+              //minimize = !minimize;
+            });}, child: Text( minimize ? "->" : "<-" ,style: TextStyle(fontSize: 24),),),),
+          ),
 
 
         ],),
       ),
       Directionality(textDirection: TextDirection.rtl,
         child: Row(mainAxisAlignment: MainAxisAlignment.start,children: [
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-              255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("-");}, child: Text("-",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("7");}, child: Text("7",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("8");}, child: Text("8",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("9");}, child: Text("9",style: TextStyle(fontSize: 24),),),),
-          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("^");}, child: Text("^",style: TextStyle(fontSize: 24),),),)),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+                255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("-");}, child: Text("-",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("7");}, child: Text("7",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("8");}, child: Text("8",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("9");}, child: Text("9",style: TextStyle(fontSize: 24),),),),
+          ),
+          Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child:minimize ? SizedBox() : TextButton(onPressed: (){changeText("^");}, child: Text("^",style: TextStyle(fontSize: 24),),),)),
 
         ],),
       ),
       Directionality(textDirection: TextDirection.rtl,
         child: Row(mainAxisAlignment: MainAxisAlignment.start,children: [
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-              255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("*");}, child: Text("*",style: TextStyle(fontSize: 24),),),),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+                255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("*");}, child: Text("*",style: TextStyle(fontSize: 24),),),),
+          ),
 
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("4");}, child: Text("4",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("5");}, child: Text("5",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("6");}, child: Text("6",style: TextStyle(fontSize: 24),),),),
-          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("e");}, child: Text("e",style: TextStyle(fontSize: 24),),),)),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("4");}, child: Text("4",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("5");}, child: Text("5",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("6");}, child: Text("6",style: TextStyle(fontSize: 24),),),),
+          ),
+          Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child:minimize ? SizedBox() : TextButton(onPressed: (){changeText("e");}, child: Text("e",style: TextStyle(fontSize: 24),),),)),
 
         ],),
       ),
       Directionality(textDirection: TextDirection.rtl,
         child: Row(mainAxisAlignment: MainAxisAlignment.start,children: [
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-              255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("/");}, child: Text("/",style: TextStyle(fontSize: 24),),),),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+                255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("/");}, child: Text("/",style: TextStyle(fontSize: 24),),),),
+          ),
 
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("1");}, child: Text("1",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("2");}, child: Text("2",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("3");}, child: Text("3",style: TextStyle(fontSize: 24),),),),
-          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("p");}, child: Text("p",style: TextStyle(fontSize: 24),),),)),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("1");}, child: Text("1",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("2");}, child: Text("2",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("3");}, child: Text("3",style: TextStyle(fontSize: 24),),),),
+          ),
+          Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child:minimize ? SizedBox() : TextButton(onPressed: (){changeText("p");}, child: Text("p",style: TextStyle(fontSize: 24),),),)),
 
         ],),
       ),
       Directionality(textDirection: TextDirection.rtl,
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
-              255, 28, 117, 109),Color.fromARGB(255, 43, 180, 167)]),),child: TextButton(onPressed: (){print(convertInfixToPostfix(textEditingController.text));}, child: Text("=",style: TextStyle(fontSize: 24),),),),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
+                255, 28, 117, 109),Color.fromARGB(255, 43, 180, 167)]),),child: TextButton(onPressed: (){convertInfixToPostfix(textEditingController.text);}, child: Text("=",style: TextStyle(fontSize: 24),),),),
+          ),
 
-          Directionality(textDirection: TextDirection.ltr, child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: IconButton(onPressed: textEditingController.text != "" ? (){print(textEditingController.text); textEditingController.text = textEditingController.text.substring(0,textEditingController.text.length-1);} : (){}, icon: Icon(Icons.backspace_outlined,),color: Colors.white,),)),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("0");}, child: Text("0",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: TextButton(onPressed: (){changeText(".");}, child: Text(".",style: TextStyle(fontSize: 24),),),),
-          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){textEditingController.text = "";}, child: Text("c",style: TextStyle(fontSize: 24),),),)),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: Directionality(textDirection: TextDirection.ltr, child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: IconButton(onPressed: textEditingController.text != "" ? (){print(textEditingController.text); textEditingController.text = textEditingController.text.substring(0,textEditingController.text.length-1);} : (){}, icon: Icon(Icons.backspace_outlined,),color: Colors.white,),)),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("0");}, child: Text("0",style: TextStyle(fontSize: 24),),),),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: TextButton(onPressed: (){changeText(".");}, child: Text(".",style: TextStyle(fontSize: 24),),),),
+          ),
+          Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child:minimize ? SizedBox() : TextButton(onPressed: (){textEditingController.text = "";}, child: Text("c",style: TextStyle(fontSize: 24),),),)),
 
         ],),
       ),
@@ -185,8 +247,7 @@ class _MainScreenState extends State<MainScreen> {
 
 
     return Container(
-      padding: const EdgeInsets.all(0.0),
-
+      padding: const EdgeInsets.all(2.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -214,23 +275,22 @@ class _MainScreenState extends State<MainScreen> {
 
         switch (infix[i]) {
           case "(":
-            operatorStack.push(infix[i]);
+            operatorStack.push("(");
             break;
 
           case ")":
-            var first = operatorStack.pop();
-            while(first != "("){
-              postfix += "$first ";
-              first = operatorStack.pop();
+            while(!operatorStack.isEmpty() && operatorStack.first() != "("){
+              postfix += "${operatorStack.pop()} ";
             }
+            operatorStack.pop();
             break;
 
           case "e":
-            postfix += exp(1).toString();
+            currentNum = exp(1).toString();
             break;
 
           case"p":
-            postfix += pi.toString();
+            currentNum = pi.toString();
             break;
 
           case"+":
@@ -239,17 +299,14 @@ class _MainScreenState extends State<MainScreen> {
           case"/":
           case"^":
           case"!":
-            if(operatorStack.first() == null){
-              operatorStack.push(infix[i]);
+            if(!operatorStack.isEmpty() && findPrecedence(infix[i])>=findPrecedence(operatorStack.first()!) && operatorStack.first() != "("){
+              while(!operatorStack.isEmpty() && findPrecedence(infix[i])>=findPrecedence(operatorStack.first()!) && operatorStack.first() != "(") {
+                postfix += "${operatorStack.pop()} ";
+              }
             }
-            else if(findPrecedence(infix[i])>findPrecedence(operatorStack.first()!)){
-              postfix += "${operatorStack.pop()} ";
-              operatorStack.push(infix[i]);
-            }
-            else{
-              operatorStack.push(infix[i]);
-            }
+            operatorStack.push(infix[i]);
             break;
+
           default:
             break;
         }
@@ -261,6 +318,8 @@ class _MainScreenState extends State<MainScreen> {
       postfix += "${temp} ";
       temp = operatorStack.pop();
     }
+    print(postfix);
+    print(calculatePostFix(postfix));
     return postfix;
   }
   int findPrecedence(String char){
@@ -269,7 +328,68 @@ class _MainScreenState extends State<MainScreen> {
         return operator.precedence;
       }
     }
-    return 0;
+    return -1;
+  }
+
+  String calculatePostFix(String postfix){
+    var currentNum = "";
+    var operandStack = MyStack();
+    for(var i = 0; i< postfix.length; i++){
+      if(postfix[i] == " "){
+        if(currentNum.isNotEmpty) operandStack.push(currentNum);
+        currentNum = "";
+        continue;
+      }
+      bool isOperand = ".0123456789 ".contains(postfix[i]);
+
+      if(isOperand){
+        currentNum += postfix[i];
+      }
+      else {
+        if (currentNum.isNotEmpty) {
+          operandStack.push(currentNum);
+          currentNum = "";
+        }
+        var num1 = double.parse(operandStack.pop()!);
+        var num2 = double.parse( operandStack.pop()!);
+
+        switch (postfix[i]) {
+          case"+":
+            operandStack.push((num1 + num2).toString());
+          case"-":
+            operandStack.push((num2 - num1).toString());
+          case"*":
+            operandStack.push((num1 * num2).toString());
+          case"/":
+            operandStack.push((num2 / num1).toString());
+          case"^":
+            operandStack.push((pow(num2, num1)).toString());
+          case"!":
+            operandStack.push(factorial(num1).toString());
+            break;
+
+          default:
+            break;
+        }
+      }
+    }
+    return operandStack.first()!;
+  }
+
+  double factorial(double k) {
+    if (k < 0) {
+      throw ArgumentError.value(k);
+    }
+    if (k == 0) {
+      return 1;
+    }
+    var result = k;
+    k--;
+    while (k > 1) {
+      result *= k;
+      k--;
+    }
+    return result;
   }
 
 }

@@ -28,7 +28,11 @@ class MyStack{ //with LinkedList
     return first;
   }
   String? first(){
-    return _head == null ? null : _head!.getData();
+    if (_head == null) {
+      return null;
+    } else {
+      return _head!.getData();
+    }
 
   }
   bool isEmpty(){
