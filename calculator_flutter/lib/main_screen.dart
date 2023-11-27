@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:calculator_flutter/models/MyStack.dart';
 import 'package:calculator_flutter/models/Operator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 class MainScreen extends StatefulWidget {
@@ -71,13 +72,15 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget currentText() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Container(
-          width: double.minPositive,
-          color: Colors.blue,
-            child: TextField(controller: textEditingController,style: TextStyle(color: Colors.white,fontSize: 24),readOnly: true),
+
+        Expanded(
+          child: Container(
+            width: double.maxFinite ,
+              child: TextField(controller: textEditingController, style: TextStyle(color: Colors.white,fontSize: 24),readOnly: true),
+          ),
         ),
-        Container(color: Colors.white,height: 20,),
       ],
     );
   }
@@ -109,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
 
 
     void changeText(String text){
-      textEditingController.text += text;
+      if(textEditingController.text.length < 25) textEditingController.text += text;
     }
     Color numColors = Color(0xff082931);
     Duration sizeChangeDuration = const Duration(milliseconds: 300);
@@ -120,13 +123,13 @@ class _MainScreenState extends State<MainScreen> {
         child: Row(mainAxisAlignment: mainAxisAlignment ,crossAxisAlignment: CrossAxisAlignment.center, children: [
           AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
               255, 10, 51, 59),Color.fromARGB(255, 13, 70, 75)]),),child: TextButton(onPressed: (){changeText("+");}, child: Text("+",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("(");}, child: Text("(",style: TextStyle(fontSize: 24),),),),
-          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText(")");}, child: Text(")",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("(");}, child: Text(")",style: TextStyle(fontSize: 24),),),),
+          AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText(")");}, child: Text("(",style: TextStyle(fontSize: 24),),),),
           if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("!");}, child: Text("!",style: TextStyle(fontSize: 24),),),)),
           AnimatedContainer(duration: sizeChangeDuration, width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){ setState(() {
             buttonWidthAnimator();
             //minimize = !minimize;
-          });}, child: Text( minimize ? "<-" : "->",style: TextStyle(fontSize: 24),),),),
+          });}, child: Text( minimize ? "->" : "<-" ,style: TextStyle(fontSize: 24),),),),
 
 
         ],),
@@ -171,10 +174,10 @@ class _MainScreenState extends State<MainScreen> {
           AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.centerLeft,end: Alignment.centerRight,colors: [Color.fromARGB(
               255, 28, 117, 109),Color.fromARGB(255, 43, 180, 167)]),),child: TextButton(onPressed: (){print(convertInfixToPostfix(textEditingController.text));}, child: Text("=",style: TextStyle(fontSize: 24),),),),
 
-          AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: IconButton(onPressed: textEditingController.text.isNotEmpty ? (){textEditingController.text = textEditingController.text.substring(0,textEditingController.text.length-1);}:(){}, icon: Icon(Icons.backspace_outlined),color: Colors.white,),),
+          Directionality(textDirection: TextDirection.ltr, child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: IconButton(onPressed: textEditingController.text != "" ? (){print(textEditingController.text); textEditingController.text = textEditingController.text.substring(0,textEditingController.text.length-1);} : (){}, icon: Icon(Icons.backspace_outlined,),color: Colors.white,),)),
           AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: numColors),child: TextButton(onPressed: (){changeText("0");}, child: Text("0",style: TextStyle(fontSize: 24),),),),
           AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff050f11)),child: TextButton(onPressed: (){changeText(".");}, child: Text(".",style: TextStyle(fontSize: 24),),),),
-          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){changeText("^");}, child: Text("^",style: TextStyle(fontSize: 24),),),)),
+          if(!minimize) Expanded(child: AnimatedContainer(duration: sizeChangeDuration,width: buttonWidth,height: buttonHeight,decoration: BoxDecoration(color: Color(0xff030d0e)),child: TextButton(onPressed: (){textEditingController.text = "";}, child: Text("c",style: TextStyle(fontSize: 24),),),)),
 
         ],),
       ),
@@ -199,7 +202,7 @@ class _MainScreenState extends State<MainScreen> {
     //var operandStack = MyStack();
     String currentNum = "";
     for(var i = 0; i< infix.length; i++){
-      bool isOperand = ".0123456789".contains(infix[i]);
+      bool isOperand = ".0123456789 ".contains(infix[i]);
       if(isOperand){
         currentNum += infix[i];
       }
