@@ -68,9 +68,20 @@ class _MainScreenState extends State<MainScreen> {
         child: ListView.builder(
             itemCount: history.length,
             itemBuilder: (context, index) {
-              return Text(
-                history[history.length - index - 1],
-                style: const TextStyle(color: Colors.white30),
+              return GestureDetector(
+                onTap: () {
+                  var findIndex =
+                      history[history.length - index - 1].indexOf("=");
+                  setState(() {
+                    textEditingController.text =
+                        history[history.length - index - 1]
+                            .substring(0, findIndex);
+                  });
+                },
+                child: Text(
+                  history[history.length - index - 1],
+                  style: const TextStyle(color: Colors.white30, fontSize: 18),
+                ),
               );
             }),
       ),
@@ -795,7 +806,7 @@ class _MainScreenState extends State<MainScreen> {
             currentNum = "";
           }
           var num1 = double.parse(operandStack.pop()!);
-          num num2;
+          num? num2;
           if (operandStack.first() != null && postfix[i] == "!") {
             num2 = 1;
           } else {
@@ -825,7 +836,6 @@ class _MainScreenState extends State<MainScreen> {
     } catch (e) {
       return "error";
     }
-
   }
 
   double factorial(double k) {
