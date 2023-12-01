@@ -691,6 +691,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void convertInfixToPostfix(String infix) {
+    if(infix.contains("error")) return;
     String postfix = "";
     var operatorStack = MyStack();
     //var operandStack = MyStack();
@@ -807,7 +808,7 @@ class _MainScreenState extends State<MainScreen> {
           }
           var num1 = double.parse(operandStack.pop()!);
           num? num2;
-          if (operandStack.first() != null && postfix[i] == "!") {
+          if (/*operandStack.first() != null &&*/ postfix[i] == "!") {
             num2 = 1;
           } else {
             num2 = double.parse(operandStack.pop()!);
